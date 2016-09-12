@@ -23,6 +23,7 @@ function CheckCollision(x1,y1,w1,h1, x2,y2,w2,h2)
          y2 < y1+h1
 end
 
+deaths = 0
 isAlive = true
 
 
@@ -57,8 +58,8 @@ function love.draw()
   if isAlive then
     love.graphics.draw(char.image, char.x, char.y)
   else
-
     love.graphics.print("THIS PLAYER IS NO MORE! HE HAS CEASED TO BE! PRESS R/ESC TO RESTART/QUIT", 75, 15)
+    love.graphics.print("DEATH COUNT: "..deaths, 200, 30)
     love.graphics.draw(gameover, 0, 150)
     --love.graphics.setColor(255, 0, 0)
     enemies = {}
@@ -103,6 +104,7 @@ function love.update(dt)
   	and isAlive then
   		table.remove(enemies, i)
   		isAlive = false
+      deaths = deaths + 1
   	end
   end
 
