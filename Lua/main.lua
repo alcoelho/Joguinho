@@ -2,8 +2,8 @@ local auxiliar = {}
 
 local char = {
   image = nil,
-  x     = 400,
-  y     = 475,
+  x     = (love.graphics.getWidth() / 2) - 50,
+  y     = (love.graphics.getHeight() - 150),
   w     = 85,
   h     = 90
 }
@@ -25,19 +25,25 @@ end
 
 deaths = 0
 isAlive = true
+winGame = false
 
 
 
+
+
+
+
+-------------[[ funções principais ]]---------------
 function love.load () -- ibagens
   if arg[#arg] == "-debug" then require("mobdebug").start() end
 
-  waterblock = love.graphics.newImage("water-block.png")
-  grassblock = love.graphics.newImage('grass-block.png')
-  stoneblock = love.graphics.newImage('stone-block.png')
-  gameover = love.graphics.newImage('game-over.png')
+  waterblock = love.graphics.newImage("images/water-block.png")
+  grassblock = love.graphics.newImage('images/grass-block.png')
+  stoneblock = love.graphics.newImage('images/stone-block.png')
+  gameover = love.graphics.newImage('images/game-over.png')
 
-  enemyImg = love.graphics.newImage('enemy-bug.png')
-  char.image = love.graphics.newImage('chargirl.png')
+  enemyImg = love.graphics.newImage('images/enemy-bug.png')
+  char.image = love.graphics.newImage('images/chargirl.png')
 
   for i=0, 23, 1 do
     newEnemy = { x = math.random()*800, y = math.random()*1000, img = enemyImg } -- inimigos por linha
@@ -46,6 +52,7 @@ function love.load () -- ibagens
 
 
 end
+
 
 
 
@@ -58,18 +65,14 @@ function love.draw()
   if isAlive then
     love.graphics.draw(char.image, char.x, char.y)
   else
-    love.graphics.print("THIS PLAYER IS NO MORE! HE HAS CEASED TO BE! PRESS R/ESC TO RESTART/QUIT", 75, 15)
-    love.graphics.print("DEATH COUNT: "..deaths, 200, 30)
+    auxiliar.fonte()
+    love.graphics.print("THIS PLAYER IS NO MORE! HE HAS CEASED TO BE!",90, 15)
+    love.graphics.print("PRESS R/ESC TO RESTART/QUIT", 30, 30)
+    love.graphics.print("DEATH COUNT: "..deaths, 450, 30)
     love.graphics.draw(gameover, 0, 150)
     --love.graphics.setColor(255, 0, 0)
     enemies = {}
-    if love.keyboard.isDown('r') then
-      enemies = {}
-      createEnemyTimer = createEnemyTimerMax
-      char.x = 50
-      char.y = 710
-      isAlive = true
-    end
+
   end
 
   auxiliar.wins()
@@ -83,15 +86,16 @@ end
 
 
 
+
 function love.update(dt)
 
-  auxiliar.teclado()
+  auxiliar.teclado(dt)
 
   createEnemyTimer = createEnemyTimer - (1 * dt) -- respawn
   if createEnemyTimer < 0 then
 	   createEnemyTimer = createEnemyTimerMax
 
-     newEnemy = { x = 0, y = math.random()*1000, img = enemyImg } -- inimigos por linha
+     newEnemy = { x = -100, y = math.random()*1000, img = enemyImg } -- inimigos por linha
      table.insert(enemies, newEnemy)
    end
 
@@ -112,7 +116,7 @@ function love.update(dt)
 end
 
 
-
+-------------[[ funções auxiliares ]]--------------
 auxiliar.bg = function(numrows, numcols) -- texturas do fundo
   for row = 0, numrows do
     for col = 0, numcols do
@@ -127,7 +131,7 @@ auxiliar.bg = function(numrows, numcols) -- texturas do fundo
   end
 end
 
-auxiliar.teclado = function() -- movimentos possiveis do jogador
+auxiliar.teclado = function(dt) -- movimentos possiveis do jogador
   if love.keyboard.isDown('escape') then
     love.event.push('quit')
   end
@@ -135,38 +139,41 @@ auxiliar.teclado = function() -- movimentos possiveis do jogador
   if love.keyboard.isDown('r') then
     auxiliar.restart()
   end
-
-  if love.keyboard.isDown('a', 'left')then
-    if char.x > 0 then
-      char.x = char.x - 10
-    end
-  elseif love.keyboard.isDown('d', 'right')then
-    if char.x < (love.graphics.getWidth() - char.image:getWidth()) then
-      char.x = char.x + 10
-    end
-  elseif love.keyboard.isDown('w', 'up') then
-    if char.y > 0 then
-      char.y = char.y - 10
-    end
-  elseif love.keyboard.isDown('s', 'down') then
-    if char.y < (love.graphics.getHeight() - char.image:getHeight()) then
-      char.y = char.y + 10
+  
+  if not winGame then
+    if love.keyboard.isDown('a', 'left')then
+      if char.x > 0 then
+        char.x = char.x - (dt * 100)
+      end
+    elseif love.keyboard.isDown('d', 'right')then
+      if char.x < (love.graphics.getWidth() - char.image:getWidth()) then
+        char.x = char.x + (dt * 100)
+      end
+    elseif love.keyboard.isDown('w', 'up') then
+      if char.y > 0 then
+        char.y = char.y - (dt * 100)
+      end
+    elseif love.keyboard.isDown('s', 'down') then
+      if char.y < (love.graphics.getHeight() - char.image:getHeight()) then
+        char.y = char.y + (dt * 100)
+      end
     end
   end
 end
 
 auxiliar.wins = function() -- tela de vitoria
-  if char.y < 100 then
-    --auxiliar.fonte() se descomentar com o auxiliar.fonte rolando vai bugar
-    love.graphics.print("--YOU DIED--", 250, 15)
-    love.graphics.print("Life is meaningless, death is a victory. Press R to restart", 225, 30)
+  if char.y < 50 then
+    winGame = true
+    auxiliar.fonte()
+    love.graphics.print("--YOU DIED--", (love.graphics.getWidth() / 2) - 50, 10)
+    love.graphics.print("Life is meaningless, death is a victory. Press R to restart", 25, 25 )
     love.graphics.setColor(255, 0, 0)
     enemies = {}
   end
 end
 
 auxiliar.fonte = function() -- coisa desnecessaria do lua delet this
-  font = love.graphics.newImageFont("Fonte.png",
+  font = love.graphics.newImageFont("images/Fonte.png",
     " abcdefghijklmnopqrstuvwxyz" ..
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ0" ..
     "123456789.,!?-+/():;%&`'*#=[]\"")
@@ -174,7 +181,11 @@ auxiliar.fonte = function() -- coisa desnecessaria do lua delet this
 end
 
 auxiliar.restart = function() -- pe lanza
-  char.x = 400
-  char.y = 400
+  char.x = (love.graphics.getWidth() / 2) - 50
+  char.y = (love.graphics.getHeight() - 150)
   love.graphics.setColor(255, 255, 255)
+  enemies = {}
+  createEnemyTimer = createEnemyTimerMax
+  isAlive = true
+  winGame = false
 end
