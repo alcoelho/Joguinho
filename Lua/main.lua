@@ -11,8 +11,8 @@ local char = {
 local enemyW = 100
 local enemyH = 77
 
-createEnemyTimerMax = 0.4
-createEnemyTimer = createEnemyTimerMax
+local createEnemyTimerMax = 0.4
+local createEnemyTimer    = createEnemyTimerMax
 
 enemies = {}
 
@@ -23,38 +23,28 @@ function CheckCollision(x1,y1,w1,h1, x2,y2,w2,h2)
          y2 < y1+h1
 end
 
-deaths = 0
-isAlive = true
-winGame = false
+local deaths  = 0
+local isAlive = true
+local winGame = false
 
+-------------[[ funções principais ]]--------------
 
-
-
-
-
-
--------------[[ funções principais ]]---------------
 function love.load () -- ibagens
   if arg[#arg] == "-debug" then require("mobdebug").start() end
 
   waterblock = love.graphics.newImage("images/water-block.png")
   grassblock = love.graphics.newImage('images/grass-block.png')
   stoneblock = love.graphics.newImage('images/stone-block.png')
-  gameover = love.graphics.newImage('images/game-over.png')
+  gameover   = love.graphics.newImage('images/game-over.png')
 
-  enemyImg = love.graphics.newImage('images/enemy-bug.png')
+  enemyImg   = love.graphics.newImage('images/enemy-bug.png')
   char.image = love.graphics.newImage('images/chargirl.png')
 
   for i=0, 23, 1 do
     newEnemy = { x = math.random()*800, y = math.random()*1000, img = enemyImg } -- inimigos por linha
     table.insert(enemies, newEnemy)
    end
-
-
 end
-
-
-
 
 function love.draw()
   local numrows = 6
@@ -70,23 +60,17 @@ function love.draw()
     love.graphics.print("PRESS R/ESC TO RESTART/QUIT", 30, 30)
     love.graphics.print("DEATH COUNT: "..deaths, 450, 30)
     love.graphics.draw(gameover, 0, 150)
-    --love.graphics.setColor(255, 0, 0)
     enemies = {}
-
   end
-
-  auxiliar.wins()
+  
+  if char.y < 50 then
+    auxiliar.wins()
+  end
 
   for i, enemy in ipairs(enemies) do
     love.graphics.draw(enemy.img, enemy.x, enemy.y)
   end
-
-
 end
-
-
-
-
 function love.update(dt)
 
   auxiliar.teclado(dt)
@@ -100,7 +84,7 @@ function love.update(dt)
    end
 
   for i, enemy in ipairs(enemies) do -- movimentos do inimigo
-    enemy.x = enemy.x + (150 * dt)
+    enemy.x = enemy.x + (200 * dt)
   end
 
   for i, enemy in ipairs(enemies) do
@@ -111,12 +95,10 @@ function love.update(dt)
       deaths = deaths + 1
   	end
   end
-
-
 end
 
-
 -------------[[ funções auxiliares ]]--------------
+
 auxiliar.bg = function(numrows, numcols) -- texturas do fundo
   for row = 0, numrows do
     for col = 0, numcols do
@@ -162,18 +144,16 @@ auxiliar.teclado = function(dt) -- movimentos possiveis do jogador
 end
 
 auxiliar.wins = function() -- tela de vitoria
-  if char.y < 50 then
-    winGame = true
-    auxiliar.fonte()
-    love.graphics.print("--YOU DIED--", (love.graphics.getWidth() / 2) - 50, 10)
-    love.graphics.print("Life is meaningless, death is a victory. Press R to restart", 25, 25 )
-    love.graphics.setColor(255, 0, 0)
-    enemies = {}
-  end
+  winGame = true
+  auxiliar.fonte()
+  love.graphics.print("--YOU DIED--", (love.graphics.getWidth() / 2) - 50, 10)
+  love.graphics.print("Life is meaningless, death is a victory. Press R to restart", 25, 25 )
+  love.graphics.setColor(255, 0, 0)
+  enemies = {}
 end
 
 auxiliar.fonte = function() -- coisa desnecessaria do lua delet this
-  font = love.graphics.newImageFont("images/Fonte.png",
+  local font = love.graphics.newImageFont("images/Fonte.png",
     " abcdefghijklmnopqrstuvwxyz" ..
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ0" ..
     "123456789.,!?-+/():;%&`'*#=[]\"")
