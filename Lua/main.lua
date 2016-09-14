@@ -62,8 +62,8 @@ function love.draw()
     love.graphics.draw(gameover, 0, 150)
     enemies = {}
   end
-  
-  if char.y < 50 then
+
+  if char.y < 50 and isAlive then
     auxiliar.wins()
   end
 
@@ -121,7 +121,7 @@ auxiliar.teclado = function(dt) -- movimentos possiveis do jogador
   if love.keyboard.isDown('r') then
     auxiliar.restart()
   end
-  
+
   if not winGame then
     if love.keyboard.isDown('a', 'left')then
       if char.x > 0 then
@@ -152,7 +152,7 @@ auxiliar.wins = function() -- tela de vitoria
   enemies = {}
 end
 
-auxiliar.fonte = function() -- coisa desnecessaria do lua delet this
+auxiliar.fonte = function() --
   local font = love.graphics.newImageFont("images/Fonte.png",
     " abcdefghijklmnopqrstuvwxyz" ..
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ0" ..
