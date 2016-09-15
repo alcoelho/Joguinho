@@ -2,8 +2,8 @@ local auxiliar = {}
 
 local char = {
   image = nil,
-  x     = (love.graphics.getWidth() / 2) - 50,
-  y     = (love.graphics.getHeight() - 150),
+  x     = (love.graphics.getWidth()) - 100,
+  y     = (love.graphics.getHeight() - 100),
   w     = 80,
   h     = 70
 }
@@ -223,7 +223,7 @@ end
 
 auxiliar.restart = function() -- pe lanza
   char.x = (love.graphics.getWidth() / 2) - 50
-  char.y = (love.graphics.getHeight() - 150)
+  char.y = (love.graphics.getHeight())
   love.graphics.setColor(255, 255, 255)
   enemies = {}
   createEnemyTimer = createEnemyTimerMax
