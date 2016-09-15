@@ -222,8 +222,8 @@ auxiliar.fonte = function() --
 end
 
 auxiliar.restart = function() -- pe lanza
-  char.x = (love.graphics.getWidth() / 2) - 50
-  char.y = (love.graphics.getHeight())
+  char.x = (love.graphics.getWidth() - 100)
+  char.y = (love.graphics.getHeight() - 100)
   love.graphics.setColor(255, 255, 255)
   enemies = {}
   createEnemyTimer = createEnemyTimerMax
