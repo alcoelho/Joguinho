@@ -4,14 +4,14 @@ local char = {
   image = nil,
   x     = (love.graphics.getWidth() / 2) - 50,
   y     = (love.graphics.getHeight() - 150),
-  w     = 85,
-  h     = 90
+  w     = 80,
+  h     = 70
 }
 
-local enemyW = 100
-local enemyH = 77
+local enemyW = 85
+local enemyH = 70
 
-local createEnemyTimerMax = 0.4
+local createEnemyTimerMax = 0.6
 local createEnemyTimer    = createEnemyTimerMax
 
 enemies = {}
@@ -41,6 +41,10 @@ end
 -------------[[ funções principais ]]--------------
 
 function love.load () -- ibagens
+
+  music = love.audio.newSource("encounter.mp3")
+  music:play()
+
   cheated = false
   CodeCapture.setCode(CodeCapture.KONAMI, easterEgg)
 
@@ -58,12 +62,14 @@ function love.load () -- ibagens
 
 
 
-  for i=0, 23, 1 do
-    newEnemy = { x = math.random()*800, y = math.random()*1000, img = enemyImg } -- inimigos por linha
+  for i=0, 20, 1 do
+    newEnemy = { x = math.random()*800, y = math.random(500) - love.graphics.getHeight(), img = enemyImg } -- inimigos por linha
     table.insert(enemies, newEnemy)
    end
 
 end
+
+
 
 function love.draw()
   local numrows = 6
@@ -134,7 +140,7 @@ function love.update(dt)
   if createEnemyTimer < 0 then
 	   createEnemyTimer = createEnemyTimerMax
 
-     newEnemy = { x = -100, y = math.random()*1000, img = enemyImg } -- inimigos por linha
+     newEnemy = { x = -100, y = 150 + math.random(300), img = enemyImg } -- inimigos por linha
      table.insert(enemies, newEnemy)
    end
 
@@ -223,4 +229,9 @@ auxiliar.restart = function() -- pe lanza
   createEnemyTimer = createEnemyTimerMax
   isAlive = true
   winGame = false
+  for i=0, 20, 1 do
+    newEnemy = { x = math.random()*800, y = math.random(500) - love.graphics.getHeight(), img = enemyImg } -- inimigos por linha
+    table.insert(enemies, newEnemy)
+   end
+
 end
