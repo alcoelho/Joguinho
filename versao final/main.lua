@@ -20,7 +20,7 @@ enemies1 = {}
 enemies2 = {}
 
 --Coleção: variável enemies1
-
+--a
 --Escopo: Global
 
 --Tempo de vida: Os inimigos vivem desde o momento em que foram
