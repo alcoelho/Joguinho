@@ -1,4 +1,4 @@
-local auxiliar = {}
+﻿local auxiliar = {}
 
 local char = {
   image = nil,
@@ -42,7 +42,7 @@ function love.load () -- ibagens
   gameover    = love.graphics.newImage('images/game-over.png')
 
   enemyImg1   = love.graphics.newImage('images/enemy-bug.png')
-  enemyImg2   = love.graphics.newImage('images/Rock.png')
+  enemyImg2   = love.graphics.newImage('images/minion.png')
   char.image  = love.graphics.newImage('images/chargirl.png')
   explosion   = love.graphics.newImage('images/explosion.png')
 
