@@ -1,5 +1,3 @@
--- Tirei o easter egg pq era isso que tava bugando as imagens dos chars
-
 local auxiliar = {}
 
 local char = {
@@ -19,21 +17,6 @@ local createEnemyTimer    = createEnemyTimerMax
 enemies1 = {}
 enemies2 = {}
 
---Coleção: variável enemies1
---a
---Escopo: Global
-
---Tempo de vida: Os inimigos vivem desde o momento em que foram
---instanciados até o momento em que saem da tela ou sofrem colisão,
---quando são removidos.
-
---Alocação: A alocação de espaço para os inimigos ocorre no momento
---em que o jogo é inicial e eles são instanciados dentro da função load.
-
---Desalocação: Os inimigos são removidos do jogo quando saem da tela
---e sofrem colisão, o que causa a remoção do inimigo que saiu/sofreu
---colisão e também a deslocação.
-
 function CheckCollision(x1,y1,w1,h1, x2,y2,w2,h2)
   return x1 < x2+w2 and
          x2 < x1+w1 and
@@ -48,7 +31,6 @@ local winGame = false
 -------------[[ funções principais ]]--------------
 
 function love.load () -- ibagens
-
   --music = love.audio.newSource("encounter.mp3")
   --music:play()
 
@@ -62,6 +44,7 @@ function love.load () -- ibagens
   enemyImg1   = love.graphics.newImage('images/enemy-bug.png')
   enemyImg2   = love.graphics.newImage('images/Rock.png')
   char.image  = love.graphics.newImage('images/chargirl.png')
+  explosion   = love.graphics.newImage('images/explosion.png')
 
   for i=0, 10, 1 do
     newEnemy1 = { x = math.random()*800, y = math.random()*1000, img = enemyImg1 } -- inimigos por linha
@@ -97,11 +80,16 @@ function love.draw()
   end
 
   for i, enemy in ipairs(enemies1) do
-    love.graphics.draw(enemy.img, enemy.x, enemy.y)
+    if not enemy.exploding then --desenha normalmente se não tiver explodindo
+      love.graphics.draw(enemy.img, enemy.x, enemy.y)
+    else
+      love.graphics.draw(explosion, enemy.x, enemy.y)
+    end
   end
   for i, enemy in ipairs(enemies2) do
     love.graphics.draw(enemy.img, enemy.x, enemy.y)
   end
+
 end
 function love.update(dt)
 
@@ -119,7 +107,9 @@ function love.update(dt)
    end
 
   for i, enemy in ipairs(enemies1) do -- movimentos do inimigo
-    enemy.x = enemy.x + (200 * dt)
+    if not enemy.exploding then -- explosão não anda
+      enemy.x = enemy.x + (200 * dt)
+    end
   end
   for i, enemy in ipairs(enemies2) do -- movimentos do inimigo
     enemy.x = enemy.x - (200 * dt)
@@ -142,6 +132,16 @@ function love.update(dt)
       deaths = deaths + 1
   	end
   end
+
+
+    firstEnemy = enemies1[1]
+    for i, enemy in ipairs(enemies1) do
+      for j, other in ipairs(enemies2) do
+        if CheckCollision(enemy.x, enemy.y, enemyW, enemyH, other.x, other.y, enemyW, enemyH) then
+          enemy.exploding = true
+        end
+      end
+    end
 
 
 end
