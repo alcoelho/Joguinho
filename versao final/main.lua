@@ -1,5 +1,7 @@
 ﻿local auxiliar = {}
 
+--trab06
+--char é uma tupla
 local char = {
   image = nil,
   x     = (love.graphics.getWidth() / 2) - 50,
@@ -14,6 +16,8 @@ local enemyH = 77
 local createEnemyTimerMax = 0.4
 local createEnemyTimer    = createEnemyTimerMax
 
+--trab06
+--enemies1 é usada como array
 enemies1 = {}
 enemies2 = {}
 
@@ -99,9 +103,14 @@ function love.update(dt)
   if createEnemyTimer < 0 then
 	   createEnemyTimer = createEnemyTimerMax
 
+     --trab06
+     --newEnemy1 é uma tupla, mas funciona como um registro na prática, já que a partir dele
+     --são criados os inimigos do jogo seguindo o mesmo modelo inicial
      newEnemy1 = { x = -100, y = 150 + math.random(300), img = enemyImg1 } -- inimigos por linha
      table.insert(enemies1, newEnemy1)
 
+     --trab06
+     --newEnemy2 é uma tupla
      newEnemy2 = {  x = 700, y = 150 + math.random(300), img = enemyImg2 } -- inimigos por linha
      table.insert(enemies2, newEnemy2)
    end
@@ -162,6 +171,8 @@ auxiliar.bg = function(numrows, numcols) -- texturas do fundo
   end
 end
 
+--trab06
+--KeyConstant é usado como enumeração de possíveis teclas que o usuário pode pressionar
 auxiliar.teclado = function(dt) -- movimentos possiveis do jogador
   if love.keyboard.isDown('escape') then
     love.event.push('quit')
