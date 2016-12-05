@@ -104,13 +104,11 @@ function love.update(dt)
 	   createEnemyTimer = createEnemyTimerMax
 
      --trab06
-     --newEnemy1 é uma tupla, mas funciona como um registro na prática, já que a partir dele
-     --são criados os inimigos do jogo seguindo o mesmo modelo inicial
+     --newEnemy1 é um registro na prática
      newEnemy1 = { x = -100, y = 150 + math.random(300), img = enemyImg1 } -- inimigos por linha
      table.insert(enemies1, newEnemy1)
 
      --trab06
-     --newEnemy2 é uma tupla
      newEnemy2 = {  x = 700, y = 150 + math.random(300), img = enemyImg2 } -- inimigos por linha
      table.insert(enemies2, newEnemy2)
    end
